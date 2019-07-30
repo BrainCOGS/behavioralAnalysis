@@ -1,0 +1,62 @@
+% lg is a flattened data structure where each field is either an array or a
+% cell array of size 1 x num trials. Concatenated log files come from
+% appending many different sessions from different mice, and there are
+% fields to indicate which mouse and session (in number IDs) each trial
+% belongs to. Please refer to Pinto, Koay et al, 2018, Frontiers in Behav
+% Neurosci for details about trial selection
+% Individual session logs follow the same general format, with detailed
+% information about that session persent in lg.info, not present in
+% concatenated logs
+% Below is a list a brief description of all fields, for a log with ~149K
+% trials
+
+        keyFrameLabels: {4×1 cell}        % labels for keyFrames, for easy annotation of key behavioral events
+                choice: [1×149402 single] % 0 = left, 1 = right, -1 = timed out, NaN = manually aborted
+              cueDur_L: {1×149402 cell}   % duration of each left tower, should be constant for most protocols
+              cueDur_R: {1×149402 cell}   % duration of each right tower, should be constant for most protocols
+           cueOffset_L: {1×149402 cell}   % time of offset of each left tower, in sec 
+           cueOffset_R: {1×149402 cell}   % time of offset of each right tower, in sec 
+            cueOnset_L: {1×149402 cell}   % time of onset of each left tower, in sec 
+            cueOnset_R: {1×149402 cell}   % time of onset of each right tower, in sec 
+              cueOrder: {1×149402 cell}   % 2D vector of ones and zeros reflectung tower sequence (first row, left towers)
+              cuePos_L: {1×149402 cell}   % cell array where each element indicates the y position in cm of a left tower
+              cuePos_R: {1×149402 cell}   % cell array where each element indicates the y position in cm of a right tower
+              currMaze: [1×149402 uint8]  % maze animal is running on this block. Mostly irreleavnt for curated lg files, but generally towers is either maze 10, 11, 13 or 14. 
+                 displ: {1×149402 cell}   % vector of nIter x 1 dimensions with x, y, theta displacement (same format as pos, see below)
+     effectiveCueDurCm: [1×149402 single] % effective length of the cue period in cm
+    effectiveCueDurSec: [1×149402 single] % effective duration of the cue period in sec
+     effectiveMemDurCm: [1×149402 single] % effective length of the delay period in cm
+    effectiveMemDurSec: [1×149402 single]  % effective duration of the delay period in sec
+          excessTravel: [1×149402 single]  % how much more the animal ran than the length of the maze (e.g. if it turned around). Typically we exclude trials with travel in excess of 1.1 (110%)
+     firstTrialofBlock: [1×149402 logical] % logical true if trial is the first in a block, for selection convenience
+           isLaserSess: [1×149402 logical] % whether this was an optogenetic inactivation session or not
+             keyFrames: {1×149402 cell}    % for each of the event types in keyFrameLabels, iteration where this event happened
+                  lCue: [1×149402 single] % nominal length of cue period
+               lMemory: [1×149402 single] % nominal length of memory period
+                lStart: [1×149402 single] % nominal length of start period
+               laserON: [1×149402 logical] % logical true if this is an opto inactivation trial, in pre-curated logs should be all false
+     meanPerfBlockCtrl: [1×149402 double] % average performance for each block of trials. Typically we just use trials from blocks with performance over 0.6 
+      meanPerfMainMaze: [1×149402 double] % average performance for each session 
+               nCues_L: [1×149402 single] % # Left towers
+               nCues_R: [1×149402 single] % # R towers
+         nCues_RminusL: [1×149402 single] % # R - # L towers
+           nCues_total: [1×149402 single] % # R + # L towers
+                   pos: {1×149402 cell}   % time points x 3 matrix where 1st column is X position, 2nd column is Y position, 3rd column is view angle in degrees, negative: left facong
+            protocolID: [1×149402 uint8]  % number ID of the training protocol for bookeeping
+           rewardScale: [1×149402 single] % reward size in multiples of 4 uL
+            sensorDots: {1×149402 cell}   % raw output of the motion sensor
+             speedStem: [1×149402 single] % average running speed in the stem of the maze, cm/s
+             stemDispl: [1×149402 single] % total x-y displacement in the stem of the maze
+         stemDisplNorm: [1×149402 single] % 
+                stimID: [1×149402 int64]  % ID for each tower sequence, from the stimulus bank
+                  time: {1×149402 cell}   % for each trial, 1 x nIter vector with time stamps
+              trialDur: [1×149402 single] % trial duration in sec, excluding reward / ITI
+           trialDurCue: [1×149402 single] % duration of the nominal cue period in sec
+          trialDurFull: [1×149402 single] % full trial duration including reward / ITI
+           trialDurMem: [1×149402 single] % duration of the nominal delay period
+             trialProb: {1×149402 cell}   % in each cell, generative probability of drawing a left or right trial
+             trialType: [1×149402 single] % 0 = left trial, 1 = right trial
+               mouseID: [1×149402 double] % ID of the mouse (unique)
+            genotypeID: [1×149402 double] % ID of the mouse genotype (unique)
+             sessionID: [1×149402 double] % ID of the session, unique for each mouse
+                  date: [1×149402 double] % date of the session
